@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revisão Interativa ENEM - Conteúdo Máximo</title>
+    <style>
+        /* Estilos CSS para Estrutura e Layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #e6f7ff; /* Fundo azul claro */
+            color: #333;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 850px;
+            text-align: center;
+        }
+        h1 {
+            color: #0056b3;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 1.1em;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        /* Estilo do botão principal "Começar" */
+        #start-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px #388e3c;
+            transition: background-color 0.1s, transform 0.1s;
+        }
+        #start-button:hover {
+            background-color: #388e3c;
+        }
+        #start-button:active {
+            box-shadow: 0 2px #388e3c;
+            transform: translateY(2px);
+        }
+
+        /* Estilos para a seção de Tópicos (Cards) */
+        #topics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .topic-card {
+            background-color: #f0f0f5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .topic-card p {
+            margin: 5px 0 0;
+            font-size: 1.1em;
+            color: #444;
+        }
+
+        /* Cores específicas para os cartões */
+        .linguagens { border-color: #FFC107; background-color: #FFF9E6; }
+        .humanas { border-color: #00BCD4; background-color: #E6FAFF; }
+        .natureza { border-color: #8BC34A; background-color: #F1FAE4; }
+        .matematica { border-color: #F44336; background-color: #FFEBEE; }
+        .redacao { border-color: #9C27B0; background-color: #F8E6FF; }
+        
+
+        /* Estilos para a seção de Conteúdo de Revisão */
+        #review-content-section {
+            text-align: left;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        #review-content-section h2 {
+            color: #0056b3;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        #review-content-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        #review-content-section li {
+            margin-bottom: 18px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.4;
+        }
+        #review-content-section li::before {
+            content: "➡️";
+            position: absolute;
+            left: 0;
+            color: #00bcd4;
+            font-weight: bold;
+        }
+        .detail-item {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.95em;
+            color: #555;
+            padding-left: 10px;
+            border-left: 2px solid #ccc;
+        }
+
+        /* Estilo para o botão Voltar */
+        .back-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 6px;
+            margin-top: 20px;
+            transition: background-color 0.1s;
+        }
+        .back-button:hover {
+            background-color: #d32f2f;
+        }
+        
+        /* Estilo para as FÓRMULAS aprimoradas */
+        .formula {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 12px 0;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            font-style: italic;
+            font-weight: bold;
+            color: #0056b3;
+            background-color: #e3f2fd;
+            border-left: 4px solid #0056b3;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .fraction-bar {
+            border-bottom: 2px solid #0056b3;
+            display: block; /* Garante que ocupe a largura total */
+            padding: 0 5px;
+        }
+        .numerator {
+            display: block;
+            padding: 0 5px;
+        }
+        .denominator {
+            display: block;
+            padding: 0 5px;
+        }
+        .fraction {
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 0.9em;
+            line-height: 1.2;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="welcome-section">
+            <h1>Revisão Interativa ENEM - Detalhada 🎓</h1>
+            <p>Bem-vindo(a)! Conteúdo expandido com fórmulas, detalhes específicos e explicações. Foco nos pontos de alta incidência. 💪</p>
+            
+            <button id="start-button" onclick="showTopics()">
+                Começar ▶️
+            </button>
+        </div>
+
+        <div id="topics-section" style="display: none;">
+            <h1>Selecione sua Área de Estudo</h1>
+            <p>Clique em uma área para começar a sua revisão focada e aprofundada.</p>
+            
+            <div id="topics-container">
+                <div class="topic-card linguagens" onclick="loadReviewContent('linguagens')">
+                    <span>📚</span>
+                    <p>Linguagens, Códigos e suas Tecnologias</p>
+                </div>
+                
+                <div class="topic-card humanas" onclick="loadReviewContent('humanas')">
+                    <span>🌍</span>
+                    <p>Ciências Humanas e suas Tecnologias</p>
+                </div>
+                
+                <div class="topic-card natureza" onclick="loadReviewContent('natureza')">
+                    <span>🔬</span>
+                    <p>Ciências da Natureza e suas Tecnologias</p>
+                </div>
+                
+                <div class="topic-card matematica" onclick="loadReviewContent('matematica')">
+                    <span>➕</span>
+                    <p>Matemática e suas Tecnologias</p>
+                </div>
+                
+                <div class="topic-card redacao" onclick="loadReviewContent('redacao')">
+                    <span>✍️</span>
+                    <p>Redação</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="review-content-section" style="display: none;">
+            <div id="review-content-area">
+                </div>
+            </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Revisão ENEM – Confie no seu potencial 🚀</p>
+    </footer>
+
+    <script>
+        // Conteúdo de Revisão para o ENEM (MÁXIMO DETALHAMENTO)
+        const enemContent = {
+            linguagens: {
+                title: "Linguagens, Códigos e suas Tecnologias",
+                topics: [
+                    "<b>Funções da Linguagem:</b> Dominar as 6. Foco especial: <b>Referencial</b> (foco no contexto, objetividade) e <b>Poética</b> (foco na mensagem, estética).",
+                    "<b>Literatura - Geração de 30 (2ª Fase Modernista):</b> Autores como Graciliano Ramos ('Vidas Secas') e Rachel de Queiroz ('O Quinze'). Temática social, regionalista, seca e miséria.",
+                    "<b>Figuras de Linguagem Cruciais:</b> <b>Metáfora</b> (comparação implícita) e <b>Metonímia</b> (substituição por parte, autor, marca). Ex: 'Ler Machado de Assis' (Metonímia).",
+                    "<b>Variação Linguística:</b> Reconhecer os níveis (diatópica: regional; diastrática: social; diafásica: estilo/contexto). Nenhuma variação é inerentemente superior.",
+                    "<b>Gêneros Textuais e Tipos Textuais:</b> Lembre-se que Gênero (Ex: Receita, Notícia) é a forma social do texto, enquanto Tipo (Ex: Narrativo, Dissertativo) é a estrutura. Gêneros cobrados: Charge, Tirinha, Artigo de Opinião, Editorial.",
+                    "<b>Linguagem Não-Verbal:</b> Analisar o impacto de cores, fontes, diagramação, gráficos e imagens em campanhas publicitárias e textos informativos. A combinação verbal + não-verbal é frequente.",
+                    "<b>Intertextualidade e Interdiscursividade:</b> Reconhecer a relação entre textos, onde um faz referência a outro (citação, paráfrase, paródia). É fundamental para a interpretação de tirinhas e charges.",
+                    "<b>Artes Visuais (Barroco e Arte Contemporânea):</b> Barroco (dualismo, dramaticidade, contrastes). Contemporânea (interatividade, crítica social, desmaterialização da obra).",
+                    "<b>Língua Estrangeira (Cognatos Falsos):</b> Cuidado com <i>Eventually</i> (Finalmente), <i>Pretend</i> (Fingir), <i>Library</i> (Biblioteca), <i>Actual</i> (Real/Verdadeiro)."
+                ]
+            },
+            humanas: {
+                title: "Ciências Humanas e suas Tecnologias",
+                topics: [
+                    "<b>História do Brasil (Império):</b> Foco na Crise do Segundo Reinado (Questão Militar, Questão Religiosa, Abolição) e Lei de Terras de 1850 (mantendo a concentração fundiária).",
+                    "<b>Geografia (População e Migração):</b> Transição Demográfica (queda de natalidade/mortalidade). Migração Pendular (diária) e Êxodo Rural (campo -> cidade).",
+                    "<b>Geopolítica (Guerra Fria):</b> Bipolarização (EUA x URSS), Doutrina Truman (contenção do socialismo) e Plano Marshall (ajuda à Europa Ocidental).",
+                    "<b>Sociologia (Max Weber):</b> Tipos de Ação Social (racional com relação a fins, racional com relação a valores, afetiva, tradicional) e o conceito de <i>Burocracia</i>.",
+                    "<b>Filosofia (Contratualistas):</b> Locke (Direitos Naturais: Vida, Liberdade, Propriedade), Hobbes (Leviatã, Estado Absoluto) e Rousseau (Vontade Generalizada).",
+                    "<b>Geografia Agrária:</b> Modelos Agrícolas: <b>Agribusiness</b> (alta tecnologia, monocultura, exportação) vs. <b>Agricultura Familiar</b> (policultura, subsistência, importância social). Questões Ambientais (uso de agrotóxicos).",
+                    "<b>História (República Oligárquica e Era Vargas):</b> <b>República do Café com Leite</b> (domínio de SP/MG), <b>Coronelismo</b> (voto de cabresto). Era Vargas: Revolução de 30, CLT (consolidação das leis trabalhistas) e industrialização.",
+                    "<b>Filosofia/Sociologia Contemporânea:</b> <b>Cultura de Massa</b> (Indústria Cultural da Escola de Frankfurt – Adorno/Horkheimer: padronização e alienação) e <b>Pós-Modernidade</b> (sociedade do espetáculo, efemeridade)."
+                ]
+            },
+            natureza: {
+                title: "Ciências da Natureza e suas Tecnologias",
+                topics: [
+                    // FÍSICA - Cinemática e Dinâmica
+                    "<b>Mecânica (Cinemática e Dinâmica):</b> Funções horárias, Torricelli e 2ª Lei de Newton.",
+                    "<span class='formula'>V = V<sub>0</sub> + at</span> (Vovô atoa)",
+                    "<span class='formula'>S = S<sub>0</sub> + V<sub>0</sub>t + &frac12;at&sup2;</span> (Sorvetão)",
+                    "<span class='formula'>V&sup2; = V<sub>0</sub>&sup2; + 2a&Delta;S</span> (Torricelli)",
+                    "<span class='formula'>F = m &middot; a</span> (Força resultante)",
+
+                    // FÍSICA - Eletricidade e Trabalho
+                    "<b>Eletricidade e Trabalho:</b> Leis de Ohm e Fórmulas de Energia/Potência.",
+                    "<span class='formula'>U = R &middot; I</span> (Primeira Lei de Ohm - Você Ri)",
+                    "<span class='formula'>P = U &middot; I</span> (Potência Elétrica)",
+                    "<span class='formula'>T = F &middot; d &middot; cos(&theta;)</span> (Trabalho)",
+                    "<span class='formula'>E<sub>c</sub> = &frac12;mv&sup2;</span> (Energia Cinética)",
+                    "<span class='formula'>E<sub>pg</sub> = mgh</span> (Energia Potencial Gravitacional)",
+
+                    // QUÍMICA - Concentração, Gases e pH
+                    "<b>Química (Concentração, Gases e pH):</b> Relações de densidade, molaridade e gases.",
+                    "<span class='formula'>d = m / V</span> (Densidade)",
+                    "<span class='formula'>n = m / MM</span> (Número de mols)",
+                    "<span class='formula'>P &middot; V = n &middot; R &middot; T</span> (Equação de Clapeyron - Gases)",
+                    "<span class='formula'>pH = -log[H<sup>+</sup>]</span> (Logaritmo da concentração de H+)",
+                    "<span class='formula'>pH + pOH = 14</span> (Relação básica de pH/pOH)"
+                ]
+            },
+            matematica: {
+                title: "Matemática e suas Tecnologias",
+                topics: [
+                    // MATEMÁTICA - Geometria Espacial (Volumes)
+                    "<b>Geometria Espacial (Volumes):</b> Foco nos sólidos mais frequentes no ENEM.",
+                    "<span class='formula'>V<sub>cilindro</sub> = &pi; &middot; r&sup2; &middot; h</span>",
+                    "<span class='formula'>V<sub>cone</sub> = (1/3) &middot; &pi; &middot; r&sup2; &middot; h</span>",
+                    "<span class='formula'>V<sub>esfera</sub> = (4/3) &middot; &pi; &middot; r&sup3;</span>",
+
+                    // MATEMÁTICA - Geometria Plana (Áreas)
+                    "<b>Geometria Plana (Áreas):</b> Áreas essenciais para cálculo em figuras complexas.",
+                    "<span class='formula'>A<sub>triângulo</sub> = (b &middot; h) / 2</span>",
+                    "<span class='formula'>A<sub>círculo</sub> = &pi; &middot; r&sup2;</span> (Lembre: Comprimento C = 2&pi;r)",
+                    "<span class='formula'>A<sub>trapézio</sub> = ((B + b) &middot; h) / 2</span> (Soma das bases vezes altura sobre 2)",
+                    
+                    // MATEMÁTICA - Funções e Álgebra
+                    "<b>Funções e Álgebra:</b> Bhaskara e Progressões.",
+                    "<span class='formula'>&Delta; = b&sup2; - 4ac</span> (Discriminante)",
+                    "<span class='formula'>x = (-b &plusmn; &radic;&Delta;) / 2a</span> (Fórmula de Bhaskara)",
+                    "<span class='formula'>a<sub>n</sub> = a<sub>1</sub> + (n-1) &middot; r</span> (Termo geral da P.A.)",
+                    "<span class='formula'>M = C &middot; (1 + i)<sup>t</sup></span> (Montante - Juros Compostos)",
+                    
+                    // MATEMÁTICA - Novas Fórmulas Geometria/Trigonometria
+                    "<b>Fórmulas Adicionais de Geometria e Trigonometria:</b> Essenciais para triângulos e figuras circulares.",
+                    
+                    "**Lei dos Cossenos:** Usada para encontrar um lado ou um ângulo de um triângulo não retângulo.",
+                    "<span class='formula'>a&sup2; = b&sup2; + c&sup2; - 2bc &middot; cos(A)</span>",
+
+                    "**Área do Setor Circular:** Usada para calcular a área de uma 'fatia' de pizza de um círculo, baseada no ângulo central $\\theta$ em radianos.",
+                    "<span class='formula'>A<sub>setor</sub> = &frac12; &middot; r&sup2; &middot; &theta;</span>",
+                    
+                    "<b>Medidas de Tendência Central:</b>",
+                    "<b>Mediana (M<sub>d</sub>):</b> O valor central de um conjunto de dados ordenado. (Média dos dois centrais, se o conjunto for par).",
+                    "<b>Moda (M<sub>o</sub>):</b> O valor que aparece com maior frequência no conjunto de dados.",
+                    "<b>Probabilidade Básica ($\text{P}(\text{A})$):</b> A razão entre o número de resultados favoráveis e o número total de resultados possíveis.",
+                    "<span class='formula'><span style='font-style: normal;'>P(A) = </span><span class='fraction'><span class='numerator'>Casos Favoráveis</span><span class='fraction-bar'></span><span class='denominator'>Casos Possíveis</span></span></span>"
+                ]
+            },
+            redacao: {
+                title: "Redação - Competências e Estratégia Detalhada",
+                topics: [
+                    "<b>Competência 1 (Domínio da Norma Padrão):</b> Avalia o uso correto da gramática, ortografia, concordância, regência e pontuação. Foco em evitar desvios graves.",
+                    "<b>Competência 2 (Compreensão do Tema e Tipo Textual):</b> Avalia se o candidato atendeu à proposta, aplicou conceitos de diversas áreas e utilizou a estrutura dissertativo-argumentativa.",
+                    "<b>Competência 3 (Seleção e Organização dos Argumentos):</b> Avalia a autoria, a coerência na defesa do ponto de vista e a relevância das informações, fatos e opiniões selecionados.",
+                    "<b>Competência 4 (Coesão e Coerência):</b> Avalia o uso de mecanismos linguísticos (conjunções, pronomes, sinônimos) para articular frases e parágrafos de forma lógica e organizada. <b>Dica:</b> Usar um operador argumentativo no início dos parágrafos de Desenvolvimento e Conclusão.",
+                    "<b>Competência 5 (Proposta de Intervenção - 5 Elementos):</b> Avalia a elaboração da solução para o problema abordado, respeitando os direitos humanos e contendo 5 elementos obrigatórios:<br>"+
+                        "<span class='detail-item'>1. <b>Ação:</b> O que fazer.</span>"+
+                        "<span class='detail-item'>2. <b>Agente:</b> Quem fará (Governo, ONG, Mídia, Família).</span>"+
+                        "<span class='detail-item'>3. <b>Meio/Modo:</b> Como será feito (Palestras, Lei, Campanhas).</span>"+
+                        "<span class='detail-item'>4. <b>Finalidade:</b> Para quê (Objetivo).</span>"+
+                        "<span class='detail-item'>5. <b>Detalhamento:</b> Uma informação extra sobre Agente, Ação ou Meio/Modo. <b>É o que garante os 200 pontos.</b></span>",
+                    "<b>Estrutura Ideal:</b> Introdução (Contexto + Tese); D1 (Argumento 1 + Repertório); D2 (Argumento 2 + Repertório); Conclusão (Proposta de Intervenção com os 5 elementos)."
+                ]
+            }
+        };
+
+        // FUNÇÕES JS
+        function showTopics() {
+            // Garante que a seção inicial e a seção de conteúdo sejam ocultadas
+            document.getElementById('welcome-section').style.display = 'none'; 
+            document.getElementById('review-content-section').style.display = 'none';
+            // E que a seção de tópicos seja exibida
+            document.getElementById('topics-section').style.display = 'block';
+        }
+
+        function loadReviewContent(areaKey) {
+            try {
+                const content = enemContent[areaKey];
+                let htmlContent = `<h2>Revisão Aprofundada: ${content.title}</h2>`;
+                htmlContent += `<p>Dominando os detalhes e fórmulas de alta incidência:</p><ul>`;
+                
+                content.topics.forEach(topic => {
+                    // Substitui **negrito** por <b>negrito</b>
+                    const formattedTopic = topic.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+                    htmlContent += `<li>${formattedTopic}</li>`;
+                });
+
+                htmlContent += `</ul>`;
+                // O botão de voltar é inserido AQUI, no HTML do conteúdo.
+                htmlContent += `<button class="back-button" onclick="showTopics()">↩️ Voltar para as Áreas</button>`;
+
+                document.getElementById('review-content-area').innerHTML = htmlContent;
+                document.getElementById('topics-section').style.display = 'none';
+                document.getElementById('review-content-section').style.display = 'block';
+                
+            } catch (error) {
+                // Em caso de erro (ex: chave inexistente), mostra uma mensagem
+                // Aqui também inserimos o botão de voltar, para garantir a navegação.
+                document.getElementById('review-content-area').innerHTML = "<h2>Erro ao Carregar</h2><p>Houve um erro no carregamento do conteúdo. Por favor, tente novamente.</p>";
+                
+                const reviewSection = document.getElementById('review-content-section');
+                reviewSection.innerHTML += "<button class='back-button' onclick='showTopics()'>↩️ Voltar</button>";
+                
+                document.getElementById('topics-section').style.display = 'none';
+                reviewSection.style.display = 'block';
+                
+                console.error("Erro ao carregar o conteúdo da revisão para a área:", areaKey, error);
+            }
+        }
+    </script>
+
+</body>
+</html>
